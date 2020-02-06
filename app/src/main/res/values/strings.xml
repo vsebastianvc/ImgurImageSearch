@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">PersonalApp</string>
+    <string name="description_logo_aplicacion">APP PERSONAL</string>
+    <string name="write_a_comment_here">write a comment here</string>
+    <string name="submit">SUBMIT</string>
+    <string name="selected_comment">Selected comment</string>
+    <string name="ok">OK</string>
+    <string name="comment_inserted">Comment inserted</string>
+    <string name="sorry">Sorry, I didn\'t find anything</string>
+    <string name="try_again">Try again with another keyword :)</string>
+</resources>
