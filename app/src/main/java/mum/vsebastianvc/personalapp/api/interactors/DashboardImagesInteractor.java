@@ -1,8 +1,10 @@
 package mum.vsebastianvc.personalapp.api.interactors;
 
-import mum.vsebastianvc.personalapp.models.ImgurData;
+import javax.inject.Inject;
+
 import mum.vsebastianvc.personalapp.api.services.IImgurImages;
-import mum.vsebastianvc.personalapp.api.services.ImgurImages;
+import mum.vsebastianvc.personalapp.di.component.App;
+import mum.vsebastianvc.personalapp.models.ImgurData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -12,13 +14,21 @@ import retrofit2.Response;
  */
 public class DashboardImagesInteractor {
 
+    @Inject
+    IImgurImages api;
+
+    @Inject
+    public DashboardImagesInteractor(){
+        App.getApplicationContextReference().inject(this);
+    }
+
+
     public void loadImagesWithQueryParameter(final IDataAPICall callback, final String query) {
-        IImgurImages api = ImgurImages.getInstance().getDataAPI();
         Call<ImgurData> call = api.getDataWithQuery(query);
         call.enqueue(new Callback<ImgurData>() {
             @Override
             public void onResponse(Call<ImgurData> call, Response<ImgurData> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     callback.onResponse(response.body());
                 } else {
                     callback.onFailure();

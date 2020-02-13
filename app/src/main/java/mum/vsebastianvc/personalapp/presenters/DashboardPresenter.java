@@ -6,6 +6,8 @@ import android.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import mum.vsebastianvc.personalapp.api.interactors.DashboardImagesInteractor;
 import mum.vsebastianvc.personalapp.api.interactors.IDataAPICall;
 import mum.vsebastianvc.personalapp.models.Data;
@@ -18,14 +20,18 @@ import mum.vsebastianvc.personalapp.views.IDashboardView;
 public class DashboardPresenter implements IDashboardPresenter {
 
     private IDashboardView view;
-    DashboardImagesInteractor interactorImages = new DashboardImagesInteractor();
 
-    public DashboardPresenter(IDashboardView view) {
-        this.view = view;
+
+    private DashboardImagesInteractor interactorImages;
+
+    @Inject
+    public DashboardPresenter(DashboardImagesInteractor dashboardImagesInteractor) {
+        this.interactorImages = dashboardImagesInteractor;
     }
 
 
     public void loadImgurDataWithQuery(final String query) {
+
         interactorImages.loadImagesWithQueryParameter(new IDataAPICall() {
             @Override
             public void onResponse(ImgurData images) {
@@ -39,12 +45,17 @@ public class DashboardPresenter implements IDashboardPresenter {
         }, query);
     }
 
+    @Override
+    public void setView(IDashboardView view) {
+        this.view = view;
+    }
+
     private List<Pair<String, String>> getPairs(List<Data> mData) {
         List<Pair<String, String>> listOfPairs = new ArrayList<>();
         for (int i = 0; i < mData.size(); i++) {
-            int imageList=mData.get(i).getImages()==null?0:mData.get(i).getImages().size();
-            final String title = mData.get(i).getTitle().isEmpty()?
-                    "default":mData.get(i).getTitle().replaceAll("[^a-zA-Z0-9_-]", " ");
+            int imageList = mData.get(i).getImages() == null ? 0 : mData.get(i).getImages().size();
+            final String title = mData.get(i).getTitle().isEmpty() ?
+                    "default" : mData.get(i).getTitle().replaceAll("[^a-zA-Z0-9_-]", " ");
             for (int j = 0; j < imageList; j++) {
                 if (mData.get(i).getImages().get(j).getLink() != null) {
                     listOfPairs.add(new Pair<>(title, mData.get(i).getImages().get(j).getLink()));

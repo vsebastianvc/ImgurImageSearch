@@ -10,33 +10,24 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Table Name
-    public static final String TABLE_NAME = "COMMENTS";
+    static final String TABLE_NAME = "COMMENTS";
 
     // Table columns
-    public static final String _ID = "_id";
-    public static final String TITLE = "title";
-    public static final String LINK = "link";
-    public static final String COMMENT = "comment";
+    private static final String _ID = "_id";
+    static final String TITLE = "title";
+    static final String LINK = "link";
+    static final String COMMENT = "comment";
     //public static final String DATE = "date";
 
-    // Database Information
-    static final String DB_NAME = "IMAGES_COMMENTS.DB";
 
-    // database version
-    static final int DB_VERSION = 1;
 
     // Creating table query
     private static final String CREATE_TABLE = "create table " + TABLE_NAME + "(" + _ID
             + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TITLE
             + " TEXT NOT NULL, " + LINK + " TEXT NOT NULL, " + COMMENT + " TEXT NOT NULL);";
-/**
-    private static final String CREATE_TABLE = "create table " + TABLE_NAME + "(" + TITLE
-            + " TEXT NOT NULL, " + LINK + " TEXT NOT NULL, " + COMMENT + " TEXT NOT NULL,"+ DATE
-            + " TEXT NOT NULL, " + "PRIMARY KEY ("+TITLE+","+ LINK+"));";
- **/
 
-    public DatabaseHelper(Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
+    public DatabaseHelper(Context context, String dbName, int dbVersion) {
+        super(context, dbName, null, dbVersion);
     }
 
     @Override

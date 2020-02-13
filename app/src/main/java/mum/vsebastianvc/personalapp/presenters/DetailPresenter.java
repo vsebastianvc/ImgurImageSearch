@@ -1,10 +1,11 @@
 package mum.vsebastianvc.personalapp.presenters;
 
-import android.content.Context;
-
 import java.util.List;
 
+import javax.inject.Inject;
+
 import mum.vsebastianvc.personalapp.db.DBManager;
+import mum.vsebastianvc.personalapp.di.component.App;
 import mum.vsebastianvc.personalapp.views.IDetailView;
 
 /**
@@ -13,10 +14,11 @@ import mum.vsebastianvc.personalapp.views.IDetailView;
 public class DetailPresenter implements IDetailPresenter {
 
     private IDetailView view;
-    private DBManager dbManager;
+    @Inject
+    DBManager dbManager;
 
-    public DetailPresenter(IDetailView view) {
-        this.view = view;
+    public DetailPresenter() {
+        App.getApplicationContextReference().inject(this);
     }
 
 
@@ -35,7 +37,8 @@ public class DetailPresenter implements IDetailPresenter {
         dbManager.close();
     }
 
-    public void instanceDB(Context context) {
-        dbManager = new DBManager(context);
+    @Override
+    public void setView(IDetailView view) {
+        this.view = view;
     }
 }

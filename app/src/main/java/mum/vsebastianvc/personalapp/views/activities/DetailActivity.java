@@ -26,9 +26,12 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 import mum.vsebastianvc.personalapp.R;
 import mum.vsebastianvc.personalapp.adapters.RecyclerViewAdapterComments;
 import mum.vsebastianvc.personalapp.adapters.RecyclerViewAdapterImages;
+import mum.vsebastianvc.personalapp.di.component.App;
 import mum.vsebastianvc.personalapp.presenters.DetailPresenter;
 import mum.vsebastianvc.personalapp.views.IDetailView;
 
@@ -42,28 +45,31 @@ public class DetailActivity extends AppCompatActivity implements IDetailView, Re
     private Toolbar toolbar;
     private EditText etComment;
     private Button btnSubmit;
-    private DetailPresenter presenter;
+    @Inject
+    DetailPresenter presenter;
     private RecyclerViewAdapterComments adapter;
     private RecyclerView recyclerView;
     private String title;
     private String link;
     private List<String> listOfComments;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        App.getApplicationContextReference().inject(this);
 
         toolbar = findViewById(R.id.toolbar);
         image = findViewById(R.id.iv_picture);
         recyclerView = findViewById(R.id.rv_Detail);
         etComment = findViewById(R.id.et_Comment);
         btnSubmit = findViewById(R.id.btn_submit);
-        presenter.instanceDB(getApplicationContext());
+
+        presenter.setView(this);
 
         final Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            //for crate home button
             final String titleExtra = extras.getString(DashboardActivity.TITLE);
             final String link = extras.getString(DashboardActivity.LINK);
             if (!titleExtra.isEmpty() && !link.isEmpty()) {
@@ -108,10 +114,6 @@ public class DetailActivity extends AppCompatActivity implements IDetailView, Re
 
     public void populateListOfComments(List<String> list) {
         this.listOfComments = list;
-    }
-
-    public DetailActivity() {
-        presenter = new DetailPresenter(this);
     }
 
     @Override

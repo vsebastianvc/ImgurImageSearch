@@ -14,8 +14,11 @@ import android.view.View;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import mum.vsebastianvc.personalapp.R;
 import mum.vsebastianvc.personalapp.adapters.RecyclerViewAdapterImages;
+import mum.vsebastianvc.personalapp.di.component.App;
 import mum.vsebastianvc.personalapp.presenters.DashboardPresenter;
 import mum.vsebastianvc.personalapp.views.IDashboardView;
 
@@ -25,7 +28,8 @@ import mum.vsebastianvc.personalapp.views.IDashboardView;
  */
 public class DashboardActivity extends AppCompatActivity implements IDashboardView, RecyclerViewAdapterImages.ItemClickListener {
 
-    private DashboardPresenter presenter;
+    @Inject
+    DashboardPresenter presenter;
     private RecyclerViewAdapterImages adapter;
     private RecyclerView recyclerView;
     private SearchView searchView;
@@ -38,7 +42,11 @@ public class DashboardActivity extends AppCompatActivity implements IDashboardVi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.getApplicationContextReference().inject(this);
         setContentView(R.layout.activity_dashboard);
+
+        presenter.setView(this);
+
         presenter.loadImgurDataWithQuery(DEFAULT_PAGE);
 
         searchView = findViewById(R.id.svImages);
@@ -64,10 +72,6 @@ public class DashboardActivity extends AppCompatActivity implements IDashboardVi
 
         // set up the RecyclerView
         recyclerView = findViewById(R.id.rvDashboard);
-    }
-
-    public DashboardActivity() {
-        presenter = new DashboardPresenter(this);
     }
 
     @Override
